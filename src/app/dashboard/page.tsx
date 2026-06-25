@@ -1,37 +1,96 @@
-// app/dashboard/page.tsx
-
 import { AppLayout } from "@/components/layout/app-layout";
-import { Card, CardContent } from "@/components/ui/card";
+import { StatCard } from "@/components/dashboard/stat-card";
 
-export default function DashboardPage() {
+import { supabase } from "@/lib/supabase/client";
+
+export default async function DashboardPage() {
+
+  const [
+    { count: projects },
+    { count: tasks },
+    { count: completed },
+    { count: pending },
+    { count: inProgress },
+  ] = await Promise.all([
+
+    supabase
+      .from("projects")
+      .select("*", { count: "exact", head: true }),
+
+    supabase
+      .from("tasks")
+      .select("*", { count: "exact", head: true }),
+
+    supabase
+      .from("tasks")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("status", "Completed"),
+
+    supabase
+      .from("tasks")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("status", "Pending"),
+
+    supabase
+      .from("tasks")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("status", "In Progress"),
+
+  ]);
+
   return (
     <AppLayout>
-      <h1 className="text-3xl font-bold mb-6">
-        Dashboard
-      </h1>
 
-      <div className="grid grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <p>Total Projects</p>
-            <h2 className="text-3xl font-bold">8</h2>
-          </CardContent>
-        </Card>
+      <div className="mb-8">
 
-        <Card>
-          <CardContent className="p-6">
-            <p>Active Tasks</p>
-            <h2 className="text-3xl font-bold">23</h2>
-          </CardContent>
-        </Card>
+        <h1 className="text-3xl font-bold">
+          Dashboard
+        </h1>
 
-        <Card>
-          <CardContent className="p-6">
-            <p>Completed Tasks</p>
-            <h2 className="text-3xl font-bold">15</h2>
-          </CardContent>
-        </Card>
+        <p className="text-muted-foreground mt-2">
+          Welcome back! Here's an overview of your workspace.
+        </p>
+
       </div>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+
+        <StatCard
+          title="Projects"
+          value={projects ?? 0}
+        />
+
+        <StatCard
+          title="Tasks"
+          value={tasks ?? 0}
+        />
+
+        <StatCard
+          title="Completed"
+          value={completed ?? 0}
+        />
+
+        <StatCard
+          title="Pending"
+          value={pending ?? 0}
+        />
+
+        <StatCard
+          title="In Progress"
+          value={inProgress ?? 0}
+        />
+
+      </div>
+
     </AppLayout>
   );
 }

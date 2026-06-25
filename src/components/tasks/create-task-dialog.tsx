@@ -39,6 +39,8 @@ type Props = {
 export function CreateTaskDialog({ projects }: Props) {
   const router = useRouter();
 
+
+  const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -64,11 +66,20 @@ export function CreateTaskDialog({ projects }: Props) {
       return;
     }
 
+    setTitle("");
+    setDescription("");
+    setProjectId("");
+    setStatus("Pending");
+    setPriority("Medium");
+    setOpen(false);
     router.refresh();
   }
 
   return (
-    <Dialog>
+    <Dialog 
+    open={open}
+    onOpenChange={setOpen}
+    >
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
