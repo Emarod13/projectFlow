@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase/client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 
 import {
   Dialog,
@@ -45,7 +46,8 @@ export function EditProjectDialog({
       return;
     }
 
-    window.location.reload();
+    const router = useRouter();
+    router.refresh();
   }
 
   return (

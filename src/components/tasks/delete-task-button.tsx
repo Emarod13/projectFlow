@@ -1,33 +1,36 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 
-export function DeleteProjectButton({
-  projectId,
-}: {
-  projectId: string;
-}) {
+import { supabase } from "@/lib/supabase/client";
+
+import { Button } from "@/components/ui/button";
+
+type Props = {
+  id: string;
+};
+
+export function DeleteTaskButton({ id }: Props) {
+  const router = useRouter();
+
   async function handleDelete() {
     const confirmed = confirm(
-      "Are you sure you want to delete this project?"
+      "Are you sure you want to delete this task?"
     );
 
     if (!confirmed) return;
 
     const { error } = await supabase
-      .from("projects")
+      .from("tasks")
       .delete()
-      .eq("id", projectId);
+      .eq("id", id);
 
     if (error) {
       console.error(error);
       return;
     }
 
-    const router = useRouter();
     router.refresh();
   }
 
@@ -37,7 +40,7 @@ export function DeleteProjectButton({
       size="icon"
       onClick={handleDelete}
     >
-      <Trash2 size={16} />
+      <Trash2 className="h-4 w-4" />
     </Button>
   );
 }

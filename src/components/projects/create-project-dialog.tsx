@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import {
   Dialog,
@@ -31,7 +32,8 @@ export function CreateProjectDialog() {
       return;
     }
 
-    window.location.reload();
+    const router = useRouter();
+    router.refresh();
   }
 
   return (
