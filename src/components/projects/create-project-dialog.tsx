@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase/client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 import { Trash2 } from "lucide-react";
 
 import {
@@ -36,7 +37,10 @@ export function CreateProjectDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>New Project</Button>
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          New Project
+        </Button>
       </DialogTrigger>
 
       <DialogContent>

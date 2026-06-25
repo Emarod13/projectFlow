@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase/client";
 import { CreateProjectDialog } from "@/components/projects/create-project-dialog";
 import { DeleteProjectButton } from "@/components/projects/delete-project-button";
 import { EditProjectDialog } from "@/components/projects/edit-project-dialog";
+import { Badge } from "@/components/ui/badge";
 
 export default async function ProjectsPage() {
   const { data: projects, error } = await supabase
@@ -20,43 +21,58 @@ export default async function ProjectsPage() {
 
   return (
     <AppLayout>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">
-          Projects
-        </h1>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">
+              Projects
+            </h1>
 
-        <CreateProjectDialog />
-      </div>
+            <p className="text-muted-foreground">
+              Manage all your projects.
+            </p>
+          </div>
 
-      <div className="space-y-4">
+          <CreateProjectDialog />
+        </div>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {projects?.map((project) => (
-          <Card key={project.id}>
-            <CardContent className="p-6 flex justify-between items-center">
-              <div>
-                <h2 className="font-semibold">
-                  {project.name}
-                </h2>
+          <Card
+              key={project.id}
+              className="hover:shadow-md transition-shadow"
+            >
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="font-semibold text-lg">
+                      {project.name}
+                    </h2>
 
-                <p className="text-muted-foreground">
-                  {project.description}
-                </p>
-              </div>
+                    <p className="text-muted-foreground mt-2">
+                      {project.description}
+                    </p>
 
-              <div className="flex gap-2">
-                <EditProjectDialog
-                  id={project.id}
-                  currentName={project.name}
-                  currentDescription={
-                    project.description ?? ""
-                  }
-                />
+                    <Badge className="mt-4">
+                      Active
+                    </Badge>
+                  </div>
 
-                <DeleteProjectButton
-                  projectId={project.id}
-                />
-              </div>
-            </CardContent>
-          </Card>
+                  <div className="flex gap-2">
+                    <EditProjectDialog
+                      id={project.id}
+                      currentName={project.name}
+                      currentDescription={
+                        project.description ?? ""
+                      }
+                    />
+
+                    <DeleteProjectButton
+                      projectId={project.id}
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
         ))}
       </div>
     </AppLayout>
