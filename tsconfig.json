@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/lib/auth/redirect-if-authenticated"  ],
   "exclude": ["node_modules"]
 }
