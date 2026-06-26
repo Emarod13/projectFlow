@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
-
+import { DeleteConfirmationDialog } from "@/components/shared/delete-confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -17,11 +17,7 @@ export function DeleteTaskButton({ id }: Props) {
 
   async function handleDelete() {
     const supabase = createClient();
-    const confirmed = confirm(
-      "Are you sure you want to delete this task?"
-    );
-
-    if (!confirmed) return;
+    
 
     const { error } = await supabase
       .from("tasks")
@@ -38,12 +34,22 @@ export function DeleteTaskButton({ id }: Props) {
   }
 
   return (
-    <Button
-      variant="destructive"
-      size="icon"
-      onClick={handleDelete}
-    >
-      <Trash2 className="h-4 w-4" />
-    </Button>
+    <DeleteConfirmationDialog
+
+        title="Delete Task"
+
+        description="This action cannot be undone."
+
+        onConfirm={handleDelete}
+
+        trigger={
+            <Button
+                variant="destructive"
+                size="icon"
+            >
+                <Trash2 size={16}/>
+            </Button>
+        }
+    />
   );
 }
