@@ -5,6 +5,8 @@ import { DeleteProjectButton } from "@/components/projects/delete-project-button
 import { EditProjectDialog } from "@/components/projects/edit-project-dialog";
 import { Badge } from "@/components/ui/badge";
 import { requireUser } from "@/lib/auth/require-user";
+import { FolderKanban } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 
 export default async function ProjectsPage() {
 
@@ -20,7 +22,7 @@ export default async function ProjectsPage() {
       </AppLayout>
     );
   }
-
+  
   return (
     <AppLayout>
         <div className="flex items-center justify-between mb-8">
@@ -34,10 +36,23 @@ export default async function ProjectsPage() {
             </p>
           </div>
 
-          <CreateProjectDialog />
+          {projects.length != 0 && <CreateProjectDialog />}
         </div>
 
+      {projects.length == 0  && (
+          <EmptyState
+            icon={<FolderKanban className="h-10 w-10" />}
+            title="No projects yet"
+            description="Create your first project to start organizing your work."
+            action={<CreateProjectDialog />}
+          />
+        )}
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        
+        
+
+        
         {projects?.map((project) => (
           <Card
               key={project.id}

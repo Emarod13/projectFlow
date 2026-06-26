@@ -6,6 +6,8 @@ import { CreateTaskDialog } from "@/components/tasks/create-task-dialog";
 import { DeleteTaskButton } from "@/components/tasks/delete-task-button";
 import { EditTaskDialog } from "@/components/tasks/edit-task-dialog";
 import { requireUser } from "@/lib/auth/require-user";
+import { EmptyState } from "@/components/shared/empty-state";
+import { CheckSquare } from "lucide-react";
 
 export default async function TasksPage() {
 
@@ -53,9 +55,20 @@ export default async function TasksPage() {
           </p>
         </div>
 
-        <CreateTaskDialog projects={projects ?? []} />
+        {tasks.length != 0 && (
+          <CreateTaskDialog projects={projects ?? []} />
+        )}
       </div>
 
+      {tasks.length == 0 && (
+                <EmptyState
+                  icon={<CheckSquare className="h-10 w-10" />}
+                  title="No tasks yet"
+                  description="Create your first task to start tracking work."
+                  action={<CreateTaskDialog projects = {projects} />}
+                />
+                )
+              }
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {tasks?.map((task) => (
           <Card

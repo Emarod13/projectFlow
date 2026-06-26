@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useState } from "react";
 
 type Props = {
   trigger: React.ReactNode;
@@ -27,6 +28,7 @@ export function DeleteConfirmationDialog({
   description,
   onConfirm,
 }: Props) {
+  const [loading, setLoading] =useState(false);
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -53,11 +55,23 @@ export function DeleteConfirmationDialog({
             Cancel
           </AlertDialogCancel>
 
-          <AlertDialogAction
-            onClick={onConfirm}
-          >
-            Delete
-          </AlertDialogAction>
+            <AlertDialogAction
+
+                disabled={loading}
+
+                onClick={async () => {
+
+                    setLoading(true);
+
+                    await onConfirm();
+
+                    setLoading(false);
+
+                }}
+
+            >
+                {loading ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
 
         </AlertDialogFooter>
 

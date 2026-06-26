@@ -3,6 +3,7 @@ import { LayoutDashboard, FolderKanban, CheckSquare } from "lucide-react";
 import { LogoutButton } from "../auth/logout-botton";
 import { User } from "@supabase/supabase-js";
 import { CircleUserRound } from "lucide-react";
+import { Separator } from "../ui/separator";
 type Props = {
   user: User;
   };
@@ -34,6 +35,8 @@ export function Sidebar({ user }: Props) {
 
       </div>
 
+      <Separator className="my-2" />
+
       <nav className="flex flex-col gap-2">
 
         <Link
@@ -43,7 +46,7 @@ export function Sidebar({ user }: Props) {
           <LayoutDashboard size={18} />
           Dashboard
         </Link>
-
+        <Separator className="my-3" />
         <Link
           href="/projects"
           className="flex items-center gap-2 p-2 rounded hover:bg-muted"
@@ -51,7 +54,7 @@ export function Sidebar({ user }: Props) {
           <FolderKanban size={18} />
           Projects
         </Link>
-
+        <Separator className="my-3" />
         <Link
           href="/tasks"
           className="flex items-center gap-2 p-2 rounded hover:bg-muted"
