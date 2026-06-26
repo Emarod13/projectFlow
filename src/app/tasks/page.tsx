@@ -9,6 +9,13 @@ import { requireUser } from "@/lib/auth/require-user";
 import { EmptyState } from "@/components/shared/empty-state";
 import { CheckSquare } from "lucide-react";
 
+import {
+  getPriorityBadgeClass,
+  getStatusBadgeClass,
+} from "@/lib/badge-utils";
+
+
+
 export default async function TasksPage() {
 
   const {supabase,user} = await requireUser();
@@ -91,13 +98,17 @@ export default async function TasksPage() {
                   </p>
 
                   <div className="flex gap-2 mt-3">
-                    <Badge>
-                      {task.status}
-                    </Badge>
+                    <td>
+                      <Badge className={getStatusBadgeClass(task.status)}>
+                        {task.status}
+                      </Badge>
+                    </td>
 
-                    <Badge variant="secondary">
-                      {task.priority}
-                    </Badge>
+                    <td>
+                      <Badge className={getPriorityBadgeClass(task.priority)}>
+                        {task.priority}
+                      </Badge>
+                    </td>
                   </div>
                 </div>
 

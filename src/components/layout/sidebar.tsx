@@ -1,3 +1,7 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { LayoutDashboard, FolderKanban, CheckSquare } from "lucide-react";
 import { LogoutButton } from "../auth/logout-botton";
@@ -9,6 +13,26 @@ type Props = {
   };
 
 export function Sidebar({ user }: Props) {
+
+  const pathname = usePathname();
+
+  const links = [
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      href: "/projects",
+      label: "Projects",
+      icon: FolderKanban,
+    },
+    {
+      href: "/tasks",
+      label: "Tasks",
+      icon: CheckSquare,
+    },
+  ];
   
   return (
     <aside className="w-64 border-r min-h-screen p-4 flex flex-col">
@@ -35,29 +59,38 @@ export function Sidebar({ user }: Props) {
 
       </div>
 
-      <Separator className="my-2" />
+      
 
-      <nav className="flex flex-col gap-2">
+      <nav className="flex flex-col border-b">
 
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 p-2 rounded hover:bg-muted"
+          className={cn(
+            "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
+            pathname === "/dashboard" && "bg-muted font-medium"
+          )}
         >
           <LayoutDashboard size={18} />
           Dashboard
         </Link>
-        <Separator className="my-3" />
+        
         <Link
           href="/projects"
-          className="flex items-center gap-2 p-2 rounded hover:bg-muted"
+          className={cn(
+            "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
+            pathname === "/projects" && "bg-muted font-medium"
+          )}
         >
           <FolderKanban size={18} />
           Projects
         </Link>
-        <Separator className="my-3" />
+        
         <Link
           href="/tasks"
-          className="flex items-center gap-2 p-2 rounded hover:bg-muted"
+          className={cn(
+            "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
+            pathname === "/tasks" && "bg-muted font-medium"
+          )}
         >
           <CheckSquare size={18} />
           Tasks
