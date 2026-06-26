@@ -5,12 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { CreateTaskDialog } from "@/components/tasks/create-task-dialog";
 import { DeleteTaskButton } from "@/components/tasks/delete-task-button";
 import { EditTaskDialog } from "@/components/tasks/edit-task-dialog";
-
-import { createClient } from "@/lib/supabase/server";
+import { requireUser } from "@/lib/auth/require-user";
 
 export default async function TasksPage() {
 
-  const supabase = await createClient();
+  const {supabase,user} = await requireUser();
   const [
     { data: tasks, error: tasksError },
     { data: projects, error: projectsError },] = await Promise.all([

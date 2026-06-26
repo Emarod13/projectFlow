@@ -1,11 +1,11 @@
 import { AppLayout } from "@/components/layout/app-layout";
 import { StatCard } from "@/components/dashboard/stat-card";
+import { requireUser } from "@/lib/auth/require-user";
 
-import { createClient } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
 
-  const supabase = await createClient();
+  const {supabase,user} = await requireUser();
 
   const [
     { count: projects },

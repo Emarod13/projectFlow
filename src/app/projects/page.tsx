@@ -1,14 +1,14 @@
 import { AppLayout } from "@/components/layout/app-layout";
 import { Card, CardContent } from "@/components/ui/card";
-import { createClient } from "@/lib/supabase/server";
 import { CreateProjectDialog } from "@/components/projects/create-project-dialog";
 import { DeleteProjectButton } from "@/components/projects/delete-project-button";
 import { EditProjectDialog } from "@/components/projects/edit-project-dialog";
 import { Badge } from "@/components/ui/badge";
+import { requireUser } from "@/lib/auth/require-user";
 
 export default async function ProjectsPage() {
 
-  const supabase = await createClient();
+  const {supabase,user} = await requireUser();
   const { data: projects, error } = await supabase
     .from("projects")
     .select("*");
