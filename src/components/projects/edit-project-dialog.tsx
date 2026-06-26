@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Pencil } from "lucide-react";
 
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
+
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +35,7 @@ export function EditProjectDialog({
     useState(currentDescription);
 
   async function handleUpdate() {
+    const supabase = createClient();
     const { error } = await supabase
       .from("projects")
       .update({

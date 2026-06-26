@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +15,7 @@ export function DeleteTaskButton({ id }: Props) {
   const router = useRouter();
 
   async function handleDelete() {
+    const supabase = createClient();
     const confirmed = confirm(
       "Are you sure you want to delete this task?"
     );

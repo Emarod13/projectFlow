@@ -6,9 +6,11 @@ import { CreateTaskDialog } from "@/components/tasks/create-task-dialog";
 import { DeleteTaskButton } from "@/components/tasks/delete-task-button";
 import { EditTaskDialog } from "@/components/tasks/edit-task-dialog";
 
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function TasksPage() {
+
+  const supabase = await createClient();
   const [
     { data: tasks, error: tasksError },
     { data: projects, error: projectsError },] = await Promise.all([

@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
+
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +24,7 @@ export function CreateProjectDialog() {
   const [description, setDescription] = useState("");
 
   async function handleCreateProject() {
+    const supabase = createClient();
     const { error } = await supabase.from("projects").insert({
       name,
       description,

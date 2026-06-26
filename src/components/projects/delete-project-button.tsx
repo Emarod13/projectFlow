@@ -2,7 +2,7 @@
 
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 export function DeleteProjectButton({
@@ -11,6 +11,7 @@ export function DeleteProjectButton({
   projectId: string;
 }) {
   async function handleDelete() {
+    const supabase = createClient();
     const confirmed = confirm(
       "Are you sure you want to delete this project?"
     );

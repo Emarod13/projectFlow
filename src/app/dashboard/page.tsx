@@ -1,9 +1,11 @@
 import { AppLayout } from "@/components/layout/app-layout";
 import { StatCard } from "@/components/dashboard/stat-card";
 
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
+
+  const supabase = await createClient();
 
   const [
     { count: projects },

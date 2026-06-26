@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
+
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,7 +52,7 @@ export function CreateTaskDialog({ projects }: Props) {
 
   async function handleCreateTask() {
     if (!title || !projectId) return;
-
+    const supabase = await createClient();
     const { error } = await supabase
       .from("tasks")
       .insert({
