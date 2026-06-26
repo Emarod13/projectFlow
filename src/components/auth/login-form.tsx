@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function LoginForm() {
 
@@ -38,6 +39,7 @@ export function LoginForm() {
       return;
     }
 
+    toast.success("Welcome back!");
     router.push("/dashboard");
     router.refresh();
   }
@@ -58,6 +60,7 @@ export function LoginForm() {
       return;
     }
 
+    toast.success("Account created successfully!");
     router.push("/dashboard");
     router.refresh();
   }

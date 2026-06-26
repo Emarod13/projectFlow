@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 type Project = {
   id: string;
@@ -85,11 +86,12 @@ export function EditTaskDialog({
       .eq("id", task.id);
 
     if (error) {
-      console.error(error);
+      toast.error(error.message);
       return;
     }
 
     setOpen(false);
+    toast.success("Task updated successfully");
     router.refresh();
   }
 

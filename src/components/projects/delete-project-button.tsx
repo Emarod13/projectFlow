@@ -4,12 +4,15 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function DeleteProjectButton({
   projectId,
 }: {
   projectId: string;
 }) {
+
+  const router = useRouter();
   async function handleDelete() {
     const supabase = createClient();
     const confirmed = confirm(
@@ -24,11 +27,12 @@ export function DeleteProjectButton({
       .eq("id", projectId);
 
     if (error) {
-      console.error(error);
+      toast.error(error.message);
       return;
     }
 
-    const router = useRouter();
+    
+    toast.success("Project deleted successfully");
     router.refresh();
   }
 

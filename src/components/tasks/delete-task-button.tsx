@@ -6,6 +6,7 @@ import { Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type Props = {
   id: string;
@@ -28,10 +29,11 @@ export function DeleteTaskButton({ id }: Props) {
       .eq("id", id);
 
     if (error) {
-      console.error(error);
+      toast.error(error.message)
       return;
     }
 
+    toast.success("Task deleted successfully");
     router.refresh();
   }
 

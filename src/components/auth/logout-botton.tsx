@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export function LogoutButton() {
 
     await supabase.auth.signOut();
 
+    toast.success("Logged out successfully");
     router.push("/login");
     router.refresh();
   }

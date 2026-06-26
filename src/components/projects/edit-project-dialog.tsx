@@ -18,6 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 type Props = {
   id: string;
@@ -31,9 +32,11 @@ export function EditProjectDialog({
   currentDescription,
 }: Props) {
   const [name, setName] = useState(currentName);
+  const [open, setOpen] = useState(false);
   const [description, setDescription] =
     useState(currentDescription);
 
+  const router = useRouter();
   async function handleUpdate() {
     const supabase = createClient();
     const { error } = await supabase
@@ -45,16 +48,21 @@ export function EditProjectDialog({
       .eq("id", id);
 
     if (error) {
-      console.error(error);
+      toast.error(error.message);
       return;
     }
 
-    const router = useRouter();
+    
+    toast.success("Project updated successfully");
+    setOpen(false);
     router.refresh();
   }
 
   return (
-    <Dialog>
+    <Dialog
+    open={open}
+    onOpenChange={setOpen}
+    >
       <DialogTrigger asChild>
         <Button variant="outline" size="icon">
           <Pencil size={16} />

@@ -18,11 +18,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 export function CreateProjectDialog() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
   async function handleCreateProject() {
     const supabase = createClient();
     const { error } = await supabase.from("projects").insert({
@@ -31,16 +33,18 @@ export function CreateProjectDialog() {
     });
 
     if (error) {
-      console.error(error);
+      toast.error(error.message);
       return;
     }
 
-    const router = useRouter();
+    
+    toast.success("Project created successfully");
+    setOpen(false);
     router.refresh();
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2 h-4 w-4" />

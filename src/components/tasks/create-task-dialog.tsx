@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
 
 type Project = {
   id: string;
@@ -64,7 +65,7 @@ export function CreateTaskDialog({ projects }: Props) {
       });
 
     if (error) {
-      console.error(error);
+      toast.error(error.message);
       return;
     }
 
@@ -74,7 +75,9 @@ export function CreateTaskDialog({ projects }: Props) {
     setStatus("Pending");
     setPriority("Medium");
     setOpen(false);
+    toast.success("Task created successfully");
     router.refresh();
+    
   }
 
   return (
