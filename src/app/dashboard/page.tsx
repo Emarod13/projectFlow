@@ -1,7 +1,9 @@
 import { AppLayout } from "@/components/layout/app-layout";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { requireUser } from "@/lib/auth/require-user";
-
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "lucide-react";
+import {calculateTaskStats} from "@/lib/calculate-task-stats";
 
 export default async function DashboardPage() {
 
@@ -9,87 +11,107 @@ export default async function DashboardPage() {
 
   const [
     { count: projects },
-    { count: tasks },
-    { count: completed },
-    { count: pending },
-    { count: inProgress },
+    { data: tasks },
   ] = await Promise.all([
 
     supabase
       .from("projects")
-      .select("*", { count: "exact", head: true }),
-
-    supabase
-      .from("tasks")
-      .select("*", { count: "exact", head: true }),
-
-    supabase
-      .from("tasks")
       .select("*", {
         count: "exact",
         head: true,
-      })
-      .eq("status", "Completed"),
+      }),
 
     supabase
       .from("tasks")
-      .select("*", {
-        count: "exact",
-        head: true,
-      })
-      .eq("status", "Pending"),
-
-    supabase
-      .from("tasks")
-      .select("*", {
-        count: "exact",
-        head: true,
-      })
-      .eq("status", "In Progress"),
-
+      .select("*"),
   ]);
 
+  const stats = calculateTaskStats(
+  tasks ?? [],
+  user?.id ?? "");
+  
+  
   return (
     <AppLayout>
 
-      <div className="mb-8">
+      <div className="space-y-8">
 
-        <h1 className="text-3xl font-bold">
-          Dashboard
-        </h1>
+        <div>
 
-        <p className="text-muted-foreground mt-2">
-          Welcome back! Here's an overview of your workspace.
-        </p>
+          <h1 className="text-3xl font-bold">
+            Welcome back 👋
+          </h1>
 
-      </div>
+          <p className="text-muted-foreground">
+            {user?.email}
+          </p>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        </div>
 
-        <StatCard
-          title="Projects"
-          value={projects ?? 0}
-        />
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
 
-        <StatCard
-          title="Tasks"
-          value={tasks ?? 0}
-        />
+          <StatCard
+            title="Projects"
+            value={projects ?? 0}
+          />
 
-        <StatCard
-          title="Completed"
-          value={completed ?? 0}
-        />
+          <StatCard
+            title="Tasks"
+            value={stats.total}
+          />
 
-        <StatCard
-          title="Pending"
-          value={pending ?? 0}
-        />
+          <StatCard
+            title="Completed"
+            value={stats.completed}
+          />
 
-        <StatCard
-          title="In Progress"
-          value={inProgress ?? 0}
-        />
+          <StatCard
+            title="Pending"
+            value={stats.pending}
+          />
+
+        </div>
+
+        <Card>
+
+          <CardHeader>
+
+            <CardTitle>
+              My Tasks
+            </CardTitle>
+
+            <CardDescription>
+              Overview of your assigned tasks
+            </CardDescription>
+
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+
+              
+
+              <StatCard
+              title="Pending"
+              value={stats.myPending}
+              />
+
+              <StatCard
+              title="In Progress"
+              value={stats.myInProgress}
+              />
+
+              <StatCard
+              title="Completed"
+              value={stats.myCompleted}
+              />
+
+            </div>
+
+          </CardContent>
+
+        </Card>
 
       </div>
 
