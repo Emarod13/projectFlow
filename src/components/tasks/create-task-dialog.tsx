@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 
+import type { Project } from "@/types/project";
+import type { Profile } from "@/types/profile";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,26 +32,25 @@ import {
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
-type Project = {
-  id: string;
-  name: string;
-};
+
 
 type Props = {
-  projects: Project[];
+  projects: Project[],
+  profiles: Profile[];
 };
 
-export function CreateTaskDialog({ projects }: Props) {
+export function CreateTaskDialog({ projects,profiles }: Props) {
   const router = useRouter();
 
 
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
+  const [assignedTo, setAssignedTo] = useState("");
   const [projectId, setProjectId] = useState("");
   const [status, setStatus] = useState("Pending");
   const [priority, setPriority] = useState("Medium");
+
 
   async function handleCreateTask() {
     if (!title || !projectId) return;
@@ -62,7 +63,9 @@ export function CreateTaskDialog({ projects }: Props) {
         project_id: projectId,
         status,
         priority,
-      });
+        assigned_to:
+            assignedTo || null,
+    });
 
     if (error) {
       toast.error(error.message);
@@ -126,6 +129,38 @@ export function CreateTaskDialog({ projects }: Props) {
                 </SelectItem>
               ))}
             </SelectContent>
+          </Select>
+
+          <Select
+              value={assignedTo}
+              onValueChange={setAssignedTo}
+          >
+
+              <SelectTrigger>
+
+                  <SelectValue
+                      placeholder="Assign to"
+                  />
+
+              </SelectTrigger>
+
+              <SelectContent>
+
+                  {profiles.map((profile) => (
+
+                      <SelectItem
+                          key={profile.id}
+                          value={profile.id}
+                      >
+
+                          {profile.email}
+
+                      </SelectItem>
+
+                  ))}
+
+              </SelectContent>
+
           </Select>
 
           <Select

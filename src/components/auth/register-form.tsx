@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { createProfile } from "@/lib/supabase/profiles";
+
 import { createClient } from "@/lib/supabase/client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-export function LoginForm() {
+export function RegisterForm() {
 
   const router = useRouter();
   const supabase = createClient();
@@ -23,32 +25,47 @@ export function LoginForm() {
 
   const [error, setError] = useState("");
 
-  async function handleLogin() {
+  
+  async function handleRegister() {
 
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
 
     if (error) {
-      setError(error.message);
+      toast.error(error.message);
       setLoading(false);
       return;
     }
 
-    toast.success("Welcome back!");
+    if (data.user?.id && data.user.email) {
+    const { error: profileError } = await createProfile(
+      data.user.id,
+      data.user.email
+    );
+
+    if (profileError) {
+      toast.error("User created, but profile could not be created.");
+      setLoading(false);
+      return;
+      }
+    }
+
+    toast.success("Account created successfully!");
+    setLoading(false);
     router.push("/dashboard");
     router.refresh();
   }
 
-  function redirectToRegister(): void {
-    router.push("/register");
-  }
+    function redirectToLogin(): void {
+        router.push("/login");
+    }
 
-  return (
+    return (
 
     <Card className="w-full max-w-md">
 
@@ -89,18 +106,18 @@ export function LoginForm() {
         <Button
           className="w-full"
           disabled={loading}
-          onClick={handleLogin}
+          onClick={handleRegister}
         >
-          Login
+          Register
         </Button>
 
         <Button
           variant="outline"
           className="w-full"
           disabled={loading}
-          onClick={redirectToRegister}
+          onClick={redirectToLogin}
         >
-          Create Account
+          Log-In
         </Button>
 
       </CardContent>

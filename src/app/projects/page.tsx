@@ -87,6 +87,7 @@ export default async function ProjectsPage() {
                       projectId={project.id}
                     />
                   </div>
+                  
                 </div>
               </CardContent>
             </Card>

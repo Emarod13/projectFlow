@@ -6,7 +6,9 @@ import { Pencil } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/client";
 
-
+import type { Task } from "@/types/task";
+import type { Project } from "@/types/project";
+import type { Profile } from "@/types/profile";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,28 +31,18 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 
-type Project = {
-  id: string;
-  name: string;
-};
 
-type Task = {
-  id: string;
-  title: string;
-  description: string | null;
-  status: string;
-  priority: string;
-  project_id: string;
-};
 
 type Props = {
   task: Task;
   projects: Project[];
+  profiles: Profile[];
 };
 
 export function EditTaskDialog({
   task,
   projects,
+  profiles
 }: Props) {
   const router = useRouter();
 
@@ -64,6 +56,10 @@ export function EditTaskDialog({
 
   const [projectId, setProjectId] = useState(
     task.project_id
+  );
+
+  const [assignedTo, setAssignedTo] = useState(
+  task.assigned_to ?? ""
   );
 
   const [status, setStatus] = useState(task.status);
@@ -82,6 +78,7 @@ export function EditTaskDialog({
         project_id: projectId,
         status,
         priority,
+        assigned_to: assignedTo || null,
       })
       .eq("id", task.id);
 
@@ -143,7 +140,26 @@ export function EditTaskDialog({
               ))}
             </SelectContent>
           </Select>
+          
+          <Select
+            value={assignedTo}
+            onValueChange={setAssignedTo}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Assign to" />
+            </SelectTrigger>
 
+            <SelectContent>
+              {profiles.map((profile) => (
+                <SelectItem
+                  key={profile.id}
+                  value={profile.id}
+                >
+                  {profile.email}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Select
             value={status}
             onValueChange={setStatus}
