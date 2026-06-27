@@ -37,12 +37,14 @@ type Props = {
   task: Task;
   projects: Project[];
   profiles: Profile[];
+  isLeader: boolean;
 };
 
 export function EditTaskDialog({
   task,
   projects,
-  profiles
+  profiles,
+  isLeader
 }: Props) {
   const router = useRouter();
 
@@ -69,18 +71,24 @@ export function EditTaskDialog({
   );
 
   async function handleUpdateTask() {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("tasks")
-      .update({
+
+    const updateData = isLeader
+    ? {
         title,
         description,
-        project_id: projectId,
-        status,
+        project_id,
+        assigned_to,
         priority,
-        assigned_to: assignedTo || null,
-      })
-      .eq("id", task.id);
+        status,
+      }
+    : {
+        status,
+      };
+    const supabase = createClient();
+    const { error } = await supabase
+    .from("tasks")
+    .update(updateData)
+    .eq("id", task.id);
 
     if (error) {
       toast.error(error.message);
@@ -107,21 +115,21 @@ export function EditTaskDialog({
 
         <div className="space-y-4">
 
-          <Input
+          {isLeader && (<Input
             value={title}
             onChange={(e) =>
               setTitle(e.target.value)
             }
-          />
+          />)}
 
-          <Textarea
+          {isLeader && (<Textarea
             value={description}
             onChange={(e) =>
               setDescription(e.target.value)
             }
-          />
+          />)}
 
-          <Select
+          {isLeader && (<Select
             value={projectId}
             onValueChange={setProjectId}
           >
@@ -139,9 +147,9 @@ export function EditTaskDialog({
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select>)}
           
-          <Select
+          {isLeader && (<Select
             value={assignedTo}
             onValueChange={setAssignedTo}
           >
@@ -159,7 +167,7 @@ export function EditTaskDialog({
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select>)}
           <Select
             value={status}
             onValueChange={setStatus}
@@ -183,7 +191,7 @@ export function EditTaskDialog({
             </SelectContent>
           </Select>
 
-          <Select
+          {isLeader && (<Select
             value={priority}
             onValueChange={setPriority}
           >
@@ -204,7 +212,7 @@ export function EditTaskDialog({
                 High
               </SelectItem>
             </SelectContent>
-          </Select>
+          </Select>)}
 
           <Button
             className="w-full"

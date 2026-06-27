@@ -21,12 +21,14 @@ type Props = {
   tasks: Task[];
   projects: Project[];
   profiles: Profile[];
+  currentUser: Profile;
 };
 
 export function TasksView({
   tasks,
   projects,
   profiles,
+  currentUser
 }: Props) {
 
   const [search, setSearch] = useState("");
@@ -39,6 +41,8 @@ export function TasksView({
 
   const [projectFilter, setProjectFilter] =
     useState("all");
+
+  const isLeader = currentUser?.role === "TEAM_LEADER";
 
   const [assignedFilter, setAssignedFilter] =
     useState("all");
@@ -81,11 +85,8 @@ export function TasksView({
         assignedFilter !== "all" &&
         task.profiles?.email !== assignedFilter
       ) {
-        console.log(task.assigned_to);
-        console.log(assignedFilter);
         return false;
       }
-
       return true;
 
     });
@@ -113,7 +114,7 @@ export function TasksView({
           </p>
         </div>
 
-        {tasks.length != 0 && (
+        {tasks.length != 0 && isLeader && (
           <CreateTaskDialog projects={projects ?? []} profiles={profiles ?? []} />
         )}
       </div>
@@ -169,15 +170,19 @@ export function TasksView({
                   {task.title}
                 </h3>
 
-                <div className="flex gap-2">
-                  <EditTaskDialog
-                    task={task}
-                    projects={projects ?? []}
-                    profiles={profiles ?? []}
-                  />
+                  <div className="flex gap-2">
+                    <EditTaskDialog
+                      task={task}
+                      projects={projects ?? []}
+                      profiles={profiles ?? []}
+                      isLeader={isLeader}
+                    />
 
-                  <DeleteTaskButton id={task.id} />
+                  {isLeader && (
+                    <DeleteTaskButton id={task.id} />
+                  )}
                 </div>
+                
 
               </div>
 

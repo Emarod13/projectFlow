@@ -144,7 +144,18 @@ export function CreateTaskDialog({ projects,profiles }: Props) {
 
               </SelectTrigger>
 
+                      
+
               <SelectContent>
+
+                <SelectItem
+                          key={"Unassigned"}
+                          value={""}
+                      >
+
+                          Unassigned
+
+                </SelectItem>
 
                   {profiles.map((profile) => (
 
