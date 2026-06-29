@@ -7,12 +7,14 @@ import { LayoutDashboard, FolderKanban, CheckSquare } from "lucide-react";
 import { LogoutButton } from "../auth/logout-botton";
 import { User } from "@supabase/supabase-js";
 import { CircleUserRound } from "lucide-react";
-import { Separator } from "../ui/separator";
+
+import { Profile } from "@/types/profile";
 type Props = {
   user: User;
+  profile: Profile;
   };
 
-export function Sidebar({ user }: Props) {
+export function Sidebar({ user,profile }: Props) {
 
   const pathname = usePathname();
 
@@ -35,74 +37,95 @@ export function Sidebar({ user }: Props) {
   ];
   
   return (
-    <aside className="w-64 border-r min-h-screen p-4 flex flex-col">
+  <aside className="flex min-h-screen w-64 flex-col border-r p-4">
 
-      <h1 className="text-xl font-bold mb-8">
-        ProjectFlow
-      </h1>
+    {/* Logo */}
+    <h1 className="mb-2 text-2xl font-bold">
+      ProjectFlow
+    </h1>
 
-      <div className="mb-8 flex items-center gap-3 rounded-lg border p-3">
+    <p className="mb-8 text-sm text-muted-foreground">
+      Manage your team's work
+    </p>
 
-        <CircleUserRound className="h-9 w-9 text-muted-foreground" />
+    {/* Usuario */}
+    <div className="mb-8 flex items-center gap-3 rounded-lg border p-3">
 
-        <div className="min-w-0">
+      <CircleUserRound className="h-9 w-9 text-muted-foreground" />
 
-          <p className="text-xs text-muted-foreground">
-            Signed in as
-          </p>
+      <div className="min-w-0">
 
-          <p className="truncate text-sm font-medium">
-            {user.email}
-          </p>
+        <p className="text-xs text-muted-foreground">
+          Signed in as
+        </p>
 
-        </div>
+        <p className="truncate text-sm font-medium">
+          {user.email} {/* en algun futuro deberia ser Username*/}
+        </p>
 
       </div>
 
-      
+    </div>
 
-      <nav className="flex flex-col border-b">
+    {/* Navegación */}
+    <nav className="flex-1 border-b">
 
-        <Link
-          href="/dashboard"
-          className={cn(
-            "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
-            pathname === "/dashboard" && "bg-muted font-medium"
-          )}
-        >
-          <LayoutDashboard size={18} />
-          Dashboard
-        </Link>
-        
-        <Link
-          href="/projects"
-          className={cn(
-            "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
-            pathname === "/projects" && "bg-muted font-medium"
-          )}
-        >
-          <FolderKanban size={18} />
-          Projects
-        </Link>
-        
-        <Link
-          href="/tasks"
-          className={cn(
-            "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
-            pathname === "/tasks" && "bg-muted font-medium"
-          )}
-        >
-          <CheckSquare size={18} />
-          Tasks
-        </Link>
+      <Link
+        href="/dashboard"
+        className={cn(
+          "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
+          pathname === "/dashboard" && "bg-muted font-medium"
+        )}
+      >
+        <LayoutDashboard size={18} />
+        Dashboard
+      </Link>
 
-      </nav>
+      <Link
+        href="/projects"
+        className={cn(
+          "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
+          pathname === "/projects" && "bg-muted font-medium"
+        )}
+      >
+        <FolderKanban size={18} />
+        Projects
+      </Link>
 
-      <div className="mt-auto pt-4">
-        <LogoutButton />
+      <Link
+        href="/tasks"
+        className={cn(
+          "flex items-center gap-2 border-t p-2 transition-colors hover:bg-muted",
+          pathname === "/tasks" && "bg-muted font-medium"
+        )}
+      >
+        <CheckSquare size={18} />
+        Tasks
+      </Link>
+
+    </nav>
+
+    {/* Footer */}
+    <div className="mt-6 border-t pt-4">
+
+      <div className="mb-4">
+
+        <p className="truncate text-sm font-medium">
+          {profile.email} {/* en algun futuro deberia ser Nombre y apellido*/}
+        </p>
+
+        <p className="text-xs text-muted-foreground">
+          {profile.role === "TEAM_LEADER"
+            ? "🟢 Team Leader"
+            : "🔵 Team Member"}
+        </p>
+
       </div>
 
-    </aside>
-   
-  );
+      <LogoutButton />
+
+    </div>
+
+  </aside>
+);
 }

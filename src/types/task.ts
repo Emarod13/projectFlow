@@ -16,4 +16,6 @@ export type Task = {
   profiles: {
     email: string;
   } | null;
+
+  created_at: string;
 };

@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/auth/require-user";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "lucide-react";
 import {calculateTaskStats} from "@/lib/calculate-task-stats";
+import { RecentTasks } from "@/components/dashboard/recent-tasks";
 
 export default async function DashboardPage() {
 
@@ -22,13 +23,24 @@ export default async function DashboardPage() {
       }),
 
     supabase
-      .from("tasks")
-      .select("*"),
+    .from("tasks")
+    .select(`
+      *,
+      projects(name)
+    `),
   ]);
 
   const stats = calculateTaskStats(
   tasks ?? [],
   user?.id ?? "");
+
+  const recentTasks = (tasks ?? [])
+  .toSorted(
+    (a, b) =>
+      new Date(b.created_at).getTime() -
+      new Date(a.created_at).getTime()
+  )
+  .slice(0, 5);
   
   
   return (
@@ -112,6 +124,8 @@ export default async function DashboardPage() {
           </CardContent>
 
         </Card>
+
+        <RecentTasks  tasks={recentTasks} />
 
       </div>
 

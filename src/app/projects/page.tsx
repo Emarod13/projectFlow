@@ -11,6 +11,15 @@ import { EmptyState } from "@/components/shared/empty-state";
 export default async function ProjectsPage() {
 
   const {supabase,user} = await requireUser();
+
+  const currentUser = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  const isLeader = currentUser.data?.role === "TEAM_LEADER";
+
   const { data: projects, error } = await supabase
     .from("projects")
     .select("*");
@@ -36,15 +45,23 @@ export default async function ProjectsPage() {
             </p>
           </div>
 
-          {projects.length != 0 && <CreateProjectDialog />}
+          {projects.length != 0 && isLeader && <CreateProjectDialog />}
         </div>
 
-      {projects.length == 0  && (
+      {projects.length == 0  && isLeader &&(
           <EmptyState
             icon={<FolderKanban className="h-10 w-10" />}
             title="No projects yet"
             description="Create your first project to start organizing your work."
             action={<CreateProjectDialog />}
+          />
+        )}
+
+        {projects.length == 0  && !isLeader &&(
+          <EmptyState
+            icon={<FolderKanban className="h-10 w-10" />}
+            title="No projects yet"
+            description="You are not assigned to any proyect yet."
           />
         )}
 
@@ -74,7 +91,7 @@ export default async function ProjectsPage() {
                     </Badge>
                   </div>
 
-                  <div className="flex gap-2">
+                  {isLeader && (<div className="flex gap-2">
                     <EditProjectDialog
                       id={project.id}
                       currentName={project.name}
@@ -86,7 +103,7 @@ export default async function ProjectsPage() {
                     <DeleteProjectButton
                       projectId={project.id}
                     />
-                  </div>
+                  </div>)}
                   
                 </div>
               </CardContent>
