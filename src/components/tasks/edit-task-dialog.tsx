@@ -76,8 +76,8 @@ export function EditTaskDialog({
     ? {
         title,
         description,
-        project_id,
-        assigned_to,
+        project_id: projectId,
+        assigned_to: assignedTo || null,
         priority,
         status,
       }
@@ -160,10 +160,10 @@ export function EditTaskDialog({
             <SelectContent>
               {profiles.map((profile) => (
                 <SelectItem
-                  key={profile.id}
-                  value={profile.id}
+                  key={profile?.id}
+                  value={profile?.id || ""}
                 >
-                  {profile.email}
+                  {profile?.email}
                 </SelectItem>
               ))}
             </SelectContent>

@@ -42,7 +42,7 @@ export function Sidebar({ profile }: Props) {
         </p>
 
         <p className="truncate text-sm font-medium">
-          {profile.email} {/* en algun futuro deberia ser Username*/}
+          {profile?.email} {/* en algun futuro deberia ser Username*/}
         </p>
 
       </div>
@@ -93,11 +93,11 @@ export function Sidebar({ profile }: Props) {
       <div className="mb-4">
 
         <p className="truncate text-sm font-medium">
-          {profile.email} {/* en algun futuro deberia ser Nombre y apellido*/}
+          {profile?.email} {/* en algun futuro deberia ser Nombre y apellido*/}
         </p>
 
         <p className="text-xs text-muted-foreground">
-          {profile.role === "TEAM_LEADER"
+          {profile?.role === "TEAM_LEADER"
             ? "🟢 Team Leader"
             : "🔵 Team Member"}
         </p>

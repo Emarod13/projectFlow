@@ -26,6 +26,7 @@ export default async function TasksPage() {
       description,
       status,
       priority,
+      created_at,
       project_id,
       assigned_to,
       projects(name),
@@ -40,11 +41,11 @@ export default async function TasksPage() {
   }
   
   const {
-    data: tasks,
-    error: tasksError,
-  } = await tasksQuery.order("created_at", {
-    ascending: false,
-  });
+  data: tasks,
+  error: tasksError,
+  } = await tasksQuery
+  .order("created_at", { ascending: false })
+  .overrideTypes<Task[]>();
 
   const {
     data: projects,
@@ -61,6 +62,7 @@ export default async function TasksPage() {
       </AppLayout>
     );
   }
+
 
   return (
     <AppLayout>

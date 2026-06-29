@@ -160,11 +160,11 @@ export function CreateTaskDialog({ projects,profiles }: Props) {
                   {profiles.map((profile) => (
 
                       <SelectItem
-                          key={profile.id}
-                          value={profile.id}
+                          key={profile?.id}
+                          value={profile?.id || ""}
                       >
 
-                          {profile.email}
+                          {profile?.email}
 
                       </SelectItem>
 

@@ -191,10 +191,10 @@ export function TaskFilters({
                     {profiles.map((profile) => (
 
                         <SelectItem
-                            key={profile.id}
-                            value={profile.email}
+                            key={profile?.id}
+                            value={profile?.email || ""}
                         >
-                            {profile.email}
+                            {profile?.email}
                         </SelectItem>
 
                     ))}
