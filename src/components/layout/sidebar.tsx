@@ -10,31 +10,13 @@ import { CircleUserRound } from "lucide-react";
 
 import { Profile } from "@/types/profile";
 type Props = {
-  user: User;
   profile: Profile;
   };
 
-export function Sidebar({ user,profile }: Props) {
+export function Sidebar({ profile }: Props) {
 
   const pathname = usePathname();
 
-  const links = [
-    {
-      href: "/dashboard",
-      label: "Dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      href: "/projects",
-      label: "Projects",
-      icon: FolderKanban,
-    },
-    {
-      href: "/tasks",
-      label: "Tasks",
-      icon: CheckSquare,
-    },
-  ];
   
   return (
   <aside className="flex min-h-screen w-64 flex-col border-r p-4">
@@ -60,7 +42,7 @@ export function Sidebar({ user,profile }: Props) {
         </p>
 
         <p className="truncate text-sm font-medium">
-          {user.email} {/* en algun futuro deberia ser Username*/}
+          {profile.email} {/* en algun futuro deberia ser Username*/}
         </p>
 
       </div>

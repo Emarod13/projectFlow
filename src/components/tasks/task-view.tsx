@@ -8,7 +8,7 @@ import type { Profile } from "@/types/profile";
 
 import { TaskFilters } from "./task-filters";
 import { CreateTaskDialog } from "./create-task-dialog";
-import { CheckSquare, FileText, FolderKanban, User } from "lucide-react";
+import { CheckSquare, FileText, FolderKanban, SearchX, User } from "lucide-react";
 import { EmptyState } from "../shared/empty-state";
 import { Card, CardContent } from "../ui/card";
 import { EditTaskDialog } from "./edit-task-dialog";
@@ -163,21 +163,42 @@ export function TasksView({
                 )
               }   
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {filteredTasks.length === 0 ? (
 
-        {filteredTasks.map((task) => (
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center">
 
-          <TaskCard
-            key={task.id}
-            task={task}
-            projects={projects}
-            profiles={profiles}
-            isLeader={isLeader}
-          />
+          <SearchX className="mb-4 h-12 w-12 text-muted-foreground" />
 
-        ))}
+          <h3 className="text-lg font-semibold">
+            No tasks found
+          </h3>
 
-      </div>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Try adjusting your search or filters.
+          </p>
+
+        </div>
+
+      ) : (
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+
+          {filteredTasks.map((task) => (
+
+            <TaskCard
+              key={task.id}
+              task={task}
+              projects={projects}
+              profiles={profiles}
+              isLeader={isLeader}
+            />
+
+          ))}
+
+        </div>
+
+      )}
+      
 
     </>
 

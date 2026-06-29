@@ -14,7 +14,7 @@ export async function AppLayout({
   const profile = await getCurrentProfile();
   return (
     <div className="flex">
-      <Sidebar user={user} profile={profile} />
+      <Sidebar  profile={profile} />
 
       <main className="flex-1 p-6">
         {children}
