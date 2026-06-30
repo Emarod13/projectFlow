@@ -15,10 +15,15 @@ export function LogoutButton() {
   async function handleLogout() {
     const supabase = createClient();
 
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
 
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    
     toast.success("Logged out successfully");
-    router.push("/login");
+    router.replace("/login");
     router.refresh();
   }
 
